@@ -1,0 +1,247 @@
+==============================================================================
+  AUTOMATIC COPILOT EVALUATION REPORT
+  Course: Digital Transformation and Enterprise Architecture – ML Homework
+  Topic: Stellar Luminosity – Linear and Polynomial Regression from First Principles
+  Student: David Santiago Castro Sierra
+==============================================================================
+
+------------------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------------------
+The repository is well-structured and covers essentially all required elements
+of both notebook parts and the AWS SageMaker evidence section. Notebook 1
+implements linear regression from scratch with both non-vectorized and
+vectorized gradient descent, a cost surface, convergence plot, and multiple
+learning-rate experiments. Notebook 2 extends the work to polynomial/multi-
+feature regression with proper feature engineering ([M, T, M², M·T]), a M1/
+M2/M3 feature selection experiment, an interaction coefficient sweep, and an
+inference example. SageMaker execution is documented with multiple screenshots
+and a brief local-vs-cloud comparison. The mathematical derivations are
+correct and the conceptual questions are answered adequately. Minor issues
+include a very short (10-iteration) learning-rate experiment in Notebook 1,
+a slight design-matrix inconsistency in Notebook 2 (early cells use [M, M²,
+M·T] omitting T, corrected later in feature selection), and light use of
+pandas (not listed among explicitly allowed libraries, though not a core ML
+library). Overall the submission is technically sound and demonstrates genuine
+understanding of the algorithms.
+
+------------------------------------------------------------------------------
+GRADING BREAKDOWN (0.0 – 5.0 scale)
+------------------------------------------------------------------------------
+
+1. Repository Structure & Compliance .......... 0.5 / 0.5
+   - README.md present and descriptive: YES
+   - Two notebooks covering Part I and Part II: YES
+     (01_part1_linreg_1feature.ipynb and 02_part2_polyreg.ipynb)
+   - Datasets defined inside notebooks: YES (both defined inline as Python lists)
+   - Only allowed libraries used: MOSTLY YES
+     * numpy and matplotlib are used correctly
+     * pandas is used for display purposes in Notebook 2 (not in the
+       "allowed" list, but is not an ML fitting library and does not replace
+       any required implementation; no deduction applied)
+   Deductions: 0.0
+
+2. Notebook 1 – Linear Regression ............. 1.7 / 2.0
+   - Dataset visualization and interpretation: YES – scatter plot with brief
+     note that data doesn't fit a line.
+   - Hypothesis and MSE implementation: YES – predict() and compute_cost()
+     functions implemented correctly using explicit loops.
+   - Cost surface (grid + 3D plot + explanation): YES – 3D surface over a
+     60×60 (w, b) grid with interpretation text.
+   - Correct gradient derivation: YES – partial derivatives ∂J/∂w and ∂J/∂b
+     are derived in markdown and implemented correctly.
+   - Gradient descent (non-vectorized): YES – compute_gradients() and
+     gradient_descent() implemented with explicit Python loops.
+   - Gradient descent (vectorized): YES – re-implemented using NumPy
+     vectorized operations (np.sum, array arithmetic).
+   - Convergence plot and discussion: YES – loss vs. iterations plotted;
+     text explains rapid initial descent then flattening. NOTE: the plot
+     uses history from the non-vectorized run; the vectorized version does
+     not produce a separate convergence plot, though this is a minor gap.
+   - Multiple learning-rate experiments (≥3): YES – three rates tested
+     [0.001, 0.01, 0.05]; however, only 10 iterations are run, which is
+     insufficient to observe meaningful convergence differences. (-0.2)
+   - Final fit plot and error discussion: YES – scatter + fitted line shown;
+     student correctly identifies the linear model is inadequate for
+     exponential data.
+   - Conceptual questions: YES – meaning of w (rate of luminosity change
+     w.r.t. mass) and limits of linearity (exponential growth cannot be
+     captured by a line) both answered correctly.
+   Deductions: -0.2 (learning-rate experiment runs only 10 iterations,
+   insufficient to compare convergence behavior)
+
+3. Notebook 2 – Polynomial Regression ......... 1.8 / 2.0
+   - Visualization with temperature encoding: YES – scatter plot of mass vs.
+     luminosity colored by temperature using viridis colormap.
+   - Feature engineering [M, T, M², M·T]: YES – all four engineered features
+     are present in the M3 design matrix used for final training; however,
+     the initial design matrix in cell 9 uses only [M, M², M·T] (omitting T),
+     which is inconsistent. (-0.1)
+   - Vectorized loss and gradients: YES – compute_cost() and compute_gradient()
+     use NumPy matrix operations (X.T @ error, error @ error, np.sum).
+   - Training and convergence plot: YES – two plots shown (linear and log
+     scale) for the loss curve during training.
+   - Feature selection experiment (M1, M2, M3 comparison): YES – M1=[M,T],
+     M2=[M,T,M²], M3=[M,T,M²,M·T] all trained and final losses + predicted-
+     vs-true scatter plots reported.
+   - Interaction cost analysis (w_MT sweep): YES – w_MT swept over a range
+     around the trained value, cost plotted, and sensitivity discussed. (-0.1)
+     Minor issue: the sweep range uses a relative span that could be tighter
+     for clearer visualization, but the core analysis is correct.
+   - Inference example and interpretation: YES – prediction for (M=1.3,
+     T=6600) computed and contextualized relative to the training data range.
+   Deductions: -0.2 (initial feature matrix inconsistency; minor sweep range
+   presentation)
+
+4. Cloud Execution Evidence (SageMaker) ....... 0.5 / 0.5
+   - Description of SageMaker execution: YES – step-by-step upload and run
+     instructions included.
+   - Screenshots of notebooks open in SageMaker: YES – img2.png, img3.png,
+     img4.png, img5.png present.
+   - Screenshots of successful execution: YES – img.png, img1.png present.
+   - At least one plot rendered in SageMaker: YES – img6.png, img7.png show
+     rendered plots.
+   - Local vs cloud comparison: YES – package install time, kernel version,
+     and plot rendering differences briefly discussed.
+   Deductions: 0.0
+
+------------------------------------------------------------------------------
+FINAL GRADE
+------------------------------------------------------------------------------
+Repository structure & compliance:   0.5 / 0.5
+Notebook 1 – Linear regression:      1.7 / 2.0
+Notebook 2 – Polynomial regression:  1.8 / 2.0
+Cloud execution evidence:            0.5 / 0.5
+                                    ──────────
+Total:                               4.5 / 5.0
+
+Final grade: 4.5 / 5.0
+Result: PASS (≥ 3.0)
+
+------------------------------------------------------------------------------
+STRENGTHS
+------------------------------------------------------------------------------
+- Complete coverage of all mandatory sections (cost surface, convergence plot,
+  multiple learning rates, M1/M2/M3 comparison, w_MT sweep, inference demo).
+- Both non-vectorized and vectorized implementations are present and correct
+  in Notebook 1, demonstrating understanding of both approaches.
+- Mathematical derivations of gradients are shown in LaTeX markdown and match
+  the code implementations.
+- Feature engineering is well-motivated with clear explanations of why M²
+  and M·T are useful (non-linear luminosity growth, mass-temperature interaction).
+- SageMaker evidence is thorough: multiple screenshots covering open notebooks,
+  successful execution, and rendered plots.
+- Conceptual questions answered with genuine physical reasoning (astrophysical
+  meaning of w; why linearity fails for exponential stellar luminosity).
+- Convergence plot in Notebook 2 uses both linear and log-scale views, showing
+  good analytical practice.
+- The interaction coefficient sweep and its interpretation are well-executed
+  and clearly explained.
+
+------------------------------------------------------------------------------
+ISSUES & MISSING ELEMENTS
+------------------------------------------------------------------------------
+- Notebook 1, learning-rate experiment: Only 10 iterations are run for the
+  three learning-rate comparison. This is too short to see convergence
+  behavior; 500–1000 iterations would allow a meaningful comparison of how
+  quickly each rate converges or whether any rate diverges.
+- Notebook 1, convergence plot: Shows results from the non-vectorized run;
+  the vectorized gradient descent section lacks its own convergence plot,
+  making it harder to verify that the vectorized version also converges
+  correctly.
+- Notebook 2, initial design matrix: Cell 9 builds X with [M, M², M·T]
+  omitting T, which is inconsistent with the four-feature polynomial model
+  ([M, T, M², M·T]) described in theory and used later in feature selection.
+  The correct feature set is used from the M1/M2/M3 section onward, but the
+  early inconsistency may confuse readers.
+- Notebook 2, section numbering: Section numbers restart/repeat (e.g., two
+  "Section 7" headings appear), which is a minor readability issue.
+- pandas is imported and used for display (data.head(), display(data.head()))
+  in Notebook 2. While it is not used for ML operations, it is not on the
+  explicitly allowed library list. No grade deduction was applied, but it is
+  worth noting for strict compliance.
+
+------------------------------------------------------------------------------
+TA FEEDBACK TO STUDENT
+------------------------------------------------------------------------------
+Overall, this is a solid, well-organized submission that covers all the core
+elements of the assignment. Your implementations are mathematically correct,
+your visualizations are appropriate, and the AWS SageMaker evidence is well-
+documented with screenshots and a clear comparison.
+
+The main area to strengthen is the learning-rate experiment in Notebook 1:
+running only 10 iterations does not reveal meaningful convergence differences
+between learning rates. In your next submission, run at least 500–1000
+iterations and include a discussion of what happens at each rate (e.g., slow
+convergence at very small rates, potential divergence at large rates). This
+is one of the most instructive experiments in the notebook and deserves more
+attention.
+
+For Notebook 2, clean up the early feature matrix construction so it is
+consistent with the four-feature model [M, T, M², M·T] described in the
+theory section. Also consider adding a separate convergence plot after each
+gradient descent run to make it easy to trace the training history for each
+model variant.
+
+The conceptual explanations are good – you correctly identify that luminosity
+grows non-linearly with mass and that a linear model will always over- or
+under-estimate. The inference discussion, where you contextualize the
+prediction relative to the training data range, shows good analytical
+thinking. Keep that level of reasoning throughout.
+
+------------------------------------------------------------------------------
+AI-GENERATION ASSESSMENT (NON-GRADING – INFORMATIVE ONLY)
+------------------------------------------------------------------------------
+
+A. Qualitative Assessment
+
+   Indicators suggesting AI assistance:
+   - Highly uniform structure across both notebooks (identical section
+     numbering style, consistent LaTeX formatting for all equations, parallel
+     docstring patterns in every function).
+   - Generic but accurate explanations that follow textbook phrasing closely
+     (e.g., gradient descent update rule descriptions, MSE motivation).
+   - Very clean, error-free markdown with no crossed-out drafts, no
+     exploratory dead-ends, and no visible iteration marks.
+   - README follows a standard template structure (Getting Started,
+     Prerequisites, Installing, Running the Tests, Deployment, etc.) with
+     boilerplate-style subsections.
+
+   Indicators suggesting genuine human engagement:
+   - Domain-specific framing (stellar mass/luminosity) is maintained
+     consistently and referenced meaningfully in conceptual answers.
+   - The learning-rate experiment using only 10 iterations is an authentic
+     oversight that would likely be avoided by a pure AI generation.
+   - The initial feature matrix inconsistency (omitting T in cell 9 of
+     Notebook 2) is a realistic human error that was later corrected.
+   - The inference interpretation contextualizing the prediction within the
+     training data range shows personal analytical reasoning.
+   - Some informal Spanish-influenced phrasing appears in comments and
+     explanations (e.g., variable names like wmt_star, comment "# Barrer
+     w_MT, último coeficiente en M3"), consistent with a Spanish-speaking
+     student working in their own voice.
+
+B. Quantitative Estimate
+
+   Code:              ~45% AI-assisted
+   Explanations/Markdown: ~55% AI-assisted
+   README:            ~65% AI-assisted
+
+C. Commentary
+
+   The notebooks show a combination of structured, clean content that
+   suggests AI assistance for boilerplate sections (imports, docstrings,
+   LaTeX formatting), alongside authentic human errors and domain-specific
+   reasoning that suggest the student was actively engaged in the work.
+   The most likely scenario is that the student used AI tools to scaffold
+   the notebook structure and generate clean explanations, then filled in
+   specific implementations and conceptual answers themselves. The README
+   shows the strongest AI signature, with its highly templated structure.
+   The implementation details and interpretation comments show more
+   personal engagement.
+
+   This assessment is observational and does not imply misconduct.
+
+==============================================================================
+End of Automatic Copilot Evaluation
+==============================================================================
